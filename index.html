@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101510">
+  <title>WBA Expedition Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark" id="brandMark">W<span>BA</span></div>
+        <div><strong>WBA</strong><small>EXPEDITION TRACKER</small></div>
+      </div>
+      <div class="side-label">WORKSPACE</div>
+      <nav class="nav">
+        <button class="nav-link active" data-page="dashboard"><span>▦</span> Dashboard</button>
+        <button class="nav-link" data-page="expeditions"><span>⌁</span> Ekspedisi <b id="navExpCount">0</b></button>
+        <button class="nav-link" data-page="members"><span>♙</span> Anggota</button>
+        <button class="nav-link" data-page="gallery"><span>▧</span> Galeri</button>
+        <button class="nav-link" data-page="map"><span>◎</span> Peta Ekspedisi</button>
+        <button class="nav-link" data-page="passport"><span>▤</span> Mountain Passport</button>
+        <button class="nav-link" data-page="reports"><span>▥</span> Laporan</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="side-label">PREFERENSI</div>
+        <button class="nav-link admin-only" data-page="settings"><span>⚙</span> Pengaturan</button>
+        <div class="sidebar-note"><span class="live-dot"></span><div><b>LOCAL DATABASE</b><small>Data tersimpan di perangkat ini</small></div></div>
+        <div class="version">WBA TRACKER <span>v1.0.0</span></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="mobile-menu" id="menuBtn" aria-label="Buka menu">☰</button>
+        <div class="breadcrumb"><span>WBA</span><i>/</i><strong id="crumb">Dashboard</strong></div>
+        <div class="top-actions">
+          <button class="icon-btn" id="notificationBtn" title="Notifikasi">♧<span class="notify-dot" id="notifyDot"></span></button>
+          <button class="btn btn-outline" id="adminLoginBtn" type="button">♙ Masuk Admin</button><button class="btn btn-outline" id="signOutBtn" type="button" hidden>Keluar</button><div class="user-chip"><div class="avatar">W</div><div><b id="userLabel">Pengunjung</b><small id="userRole">Mode publik</small></div></div>
+        </div>
+      </header>
+
+      <section class="page active" id="page-dashboard">
+        <div class="welcome-row">
+          <div><div class="eyebrow"><span class="live-dot"></span> WEST BORNEO ALLIANCE</div><h1>Expedition overview<span>.</span></h1><p>Catatan perjalanan, pencapaian, dan jejak langkah WBA.</p></div>
+          <button class="btn btn-primary admin-only" data-action="add-expedition">＋ Tambah Ekspedisi</button>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-top"><span>Total Ekspedisi</span><span class="stat-icon">⌁</span></div><strong id="statExp">0</strong><small>Perjalanan terdokumentasi</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Lokasi Dikunjungi</span><span class="stat-icon">◎</span></div><strong id="statPlaces">0</strong><small>Gunung dan bukit berbeda</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Anggota Terdaftar</span><span class="stat-icon">♙</span></div><strong id="statMembers">0</strong><small>Database anggota WBA</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Total Jarak Trek</span><span class="stat-icon">↗</span></div><strong id="statDistance">0 <em>km</em></strong><small>Akumulasi jarak perjalanan</small></article>
+        </div>
+        <div class="content-grid">
+          <article class="panel chart-panel"><div class="panel-heading"><div><h2>Aktivitas ekspedisi</h2><p>Jumlah perjalanan per tahun</p></div><span class="panel-tag">ANNUAL REPORT</span></div><div id="yearChart" class="bar-chart"></div></article>
+          <article class="panel"><div class="panel-heading"><div><h2>Ringkasan komunitas</h2><p>Rekap pencapaian WBA</p></div></div><div class="summary-list"><div><span>Akumulasi elevasi</span><b id="statElevation">0 mdpl</b></div><div><span>Peserta tercatat</span><b id="statParticipants">0</b></div><div><span>Dokumentasi</span><b id="statMedia">0 file</b></div><div><span>Ekspedisi tahun ini</span><b id="statThisYear">0</b></div></div><div class="callout"><span>✦</span><div><b>Every trail tells a story.</b><small>Dokumentasikan setiap langkah perjalanan WBA.</small></div></div></article>
+        </div>
+        <article class="panel recent-panel"><div class="panel-heading"><div><h2>Ekspedisi terbaru</h2><p>Jejak perjalanan yang terakhir dicatat</p></div><button class="text-btn" data-page="expeditions">Lihat semua →</button></div><div id="recentExpeditions" class="table-wrap"></div></article>
+      </section>
+
+      <section class="page" id="page-expeditions">
+        <div class="page-heading"><div><div class="eyebrow">FIELD RECORDS</div><h1>Data ekspedisi<span>.</span></h1><p>Kelola seluruh catatan perjalanan WBA.</p></div><button class="btn btn-primary admin-only" data-action="add-expedition">＋ Tambah Ekspedisi</button></div>
+        <div class="toolbar"><label class="search-box">⌕ <input id="expSearch" placeholder="Cari gunung, lokasi, koordinator..."></label><select id="yearFilter"><option value="">Semua tahun</option></select><select id="difficultyFilter"><option value="">Semua tingkat</option><option>Mudah</option><option>Menengah</option><option>Sulit</option><option>Ekstrem</option></select></div>
+        <div id="expeditionList" class="expedition-list"></div>
+      </section>
+
+      <section class="page" id="page-members">
+        <div class="page-heading"><div><div class="eyebrow">CREW DIRECTORY</div><h1>Anggota WBA<span>.</span></h1><p>Database dan profil anggota komunitas.</p></div><button class="btn btn-primary admin-only" data-action="add-member">＋ Tambah Anggota</button></div>
+        <div class="toolbar"><label class="search-box">⌕ <input id="memberSearch" placeholder="Cari nama atau ID anggota..."></label><select id="memberStatus"><option value="">Semua status</option><option>Aktif</option><option>Nonaktif</option></select></div>
+        <div id="memberList" class="member-grid"></div>
+      </section>
+
+      <section class="page" id="page-gallery">
+        <div class="page-heading"><div><div class="eyebrow">VISUAL ARCHIVE</div><h1>Galeri dokumentasi<span>.</span></h1><p>Foto dan video dari setiap perjalanan WBA.</p></div><button class="btn btn-primary admin-only" data-action="add-media">＋ Tambah Media</button></div>
+        <div class="toolbar"><label class="search-box">⌕ <input id="gallerySearch" placeholder="Cari judul atau lokasi..."></label><select id="galleryType"><option value="">Semua media</option><option value="image">Foto</option><option value="video">Video</option></select></div>
+        <div id="galleryGrid" class="gallery-grid"></div>
+      </section>
+
+      <section class="page" id="page-map">
+        <div class="page-heading"><div><div class="eyebrow">TRAIL LOCATIONS</div><h1>Peta ekspedisi<span>.</span></h1><p>Lokasi yang pernah dikunjungi dan dicatat oleh WBA.</p></div></div>
+        <div class="map-notice">Peta membutuhkan koneksi internet. Lokasi dengan koordinat akan ditampilkan sebagai penanda.</div>
+        <div id="mapCanvas" class="map-canvas"><div class="map-placeholder"><div class="map-symbol">◎</div><h3>Peta ekspedisi WBA</h3><p>Tambahkan koordinat latitude dan longitude pada data ekspedisi untuk menampilkan titik lokasi.</p><button class="btn btn-outline" data-page="expeditions">Kelola ekspedisi</button></div></div>
+        <div id="mapLocations" class="location-list"></div>
+      </section>
+
+      <section class="page" id="page-passport">
+        <div class="page-heading"><div><div class="eyebrow">PERSONAL ACHIEVEMENTS</div><h1>Mountain passport<span>.</span></h1><p>Rekam jejak gunung dan bukit yang telah dijelajahi anggota.</p></div></div>
+        <div class="toolbar"><select id="passportMember"><option value="">Semua anggota</option></select></div>
+        <div id="passportContent"></div>
+      </section>
+
+      <section class="page" id="page-reports">
+        <div class="page-heading"><div><div class="eyebrow">DATA & ANALYTICS</div><h1>Laporan ekspedisi<span>.</span></h1><p>Ringkasan statistik dan ekspor data komunitas.</p></div></div>
+        <div class="stats-grid compact-stats"><article class="stat-card"><span>Total ekspedisi</span><strong id="reportExp">0</strong></article><article class="stat-card"><span>Total peserta</span><strong id="reportPeople">0</strong></article><article class="stat-card"><span>Total jarak</span><strong id="reportKm">0 km</strong></article><article class="stat-card"><span>Total elevasi</span><strong id="reportElev">0 mdpl</strong></article></div>
+        <article class="panel"><div class="panel-heading"><div><h2>Ekspor dan backup data</h2><p>Unduh salinan database atau cetak laporan.</p></div></div><div class="export-grid"><button class="export-card" id="exportCsv"><span>▤</span><b>Ekspor CSV</b><small>Data ekspedisi untuk spreadsheet</small></button><button class="export-card" id="printReport"><span>▧</span><b>Cetak / PDF</b><small>Simpan laporan sebagai PDF melalui browser</small></button><button class="export-card admin-only" id="backupData"><span>⬇</span><b>Backup database</b><small>Unduh seluruh data dan dokumentasi</small></button><label class="export-card upload-card admin-only"><span>⬆</span><b>Restore database</b><small>Pulihkan dari file backup JSON</small><input type="file" id="restoreInput" accept=".json,application/json"></label></div></article>
+        <article class="panel"><div class="panel-heading"><div><h2>Ringkasan tahunan</h2><p>Statistik perjalanan berdasarkan tahun.</p></div></div><div id="reportTable" class="table-wrap"></div></article>
+      </section>
+
+      <section class="page" id="page-settings">
+        <div class="page-heading"><div><div class="eyebrow">CONFIGURATION</div><h1>Pengaturan<span>.</span></h1><p>Identitas komunitas dan pengelolaan database lokal.</p></div></div>
+        <div class="settings-grid"><article class="panel"><div class="panel-heading"><div><h2>Profil komunitas</h2><p>Informasi identitas WBA.</p></div></div><form id="settingsForm" class="form-grid"><label>Nama komunitas<input name="name" id="settingName" value="West Borneo Alliance" required></label><label>Singkatan<input name="short" id="settingShort" value="WBA" required></label><label>Tagline<input name="tagline" id="settingTagline" value="Explore • Document • Preserve"></label><label>Wilayah<input name="region" id="settingRegion" value="Kalimantan Barat, Indonesia"></label><label class="full">Deskripsi<textarea name="description" id="settingDescription" rows="4" placeholder="Tentang komunitas WBA..."></textarea></label><button class="btn btn-primary" type="submit">Simpan pengaturan</button></form></article><article class="panel logo-panel"><div class="panel-heading"><div><h2>Logo komunitas</h2><p>Tampil di sidebar untuk semua pengunjung. Hanya admin yang bisa mengganti.</p></div><span class="panel-tag">ADMIN ONLY</span></div><div class="logo-preview-wrap"><div class="logo-preview" id="logoPreview">WBA</div><div><b>Logo WBA</b><small>PNG, JPG, atau WEBP · Maksimal 2 MB</small></div></div><div class="logo-actions"><label class="btn btn-primary" for="logoUpload">Pilih logo</label><input id="logoUpload" type="file" accept="image/png,image/jpeg,image/webp" hidden><button class="btn btn-outline" id="removeLogo" type="button">Hapus logo</button></div></article><article class="panel"><div class="panel-heading"><div><h2>Database cloud</h2><p>Data tersimpan online di Supabase dan dilihat semua orang.</p></div></div><div class="summary-list"><div><span>Metode penyimpanan</span><b>Supabase (cloud)</b></div><div><span>Jumlah ekspedisi</span><b id="settingExp">0</b></div><div><span>Jumlah anggota</span><b id="settingMembers">0</b></div><div><span>Jumlah media</span><b id="settingMedia">0</b></div></div><button class="btn btn-danger-outline" id="clearData">Hapus seluruh data cloud</button><p class="fine-print">Peringatan: menghapus data berlaku untuk semua pengunjung dan tidak dapat dibatalkan. Lakukan backup lebih dulu.</p></article></div>
+      </section>
+      <footer class="footer">© <span id="footerYear"></span> WBA – West Borneo Alliance <span>Built for the trails.</span></footer>
+    </main>
+  </div>
+  <div id="authGate" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(5,12,10,.88);align-items:center;justify-content:center;padding:20px">
+    <form id="authForm" style="width:min(420px,100%);background:#14251f;color:#edf5f0;border:1px solid #426452;border-radius:18px;padding:28px;box-shadow:0 20px 70px #0008;font:14px system-ui">
+      <div style="font-size:12px;letter-spacing:2px;color:#9cc6aa">WEST BORNEO ALLIANCE</div>
+      <h2 style="margin:8px 0">Masuk Admin WBA</h2>
+      <p style="color:#b7c9bd;line-height:1.5">Khusus pengurus/admin untuk menambah, mengubah, atau menghapus data. Pengunjung tidak perlu login.</p>
+      <input id="authEmail" type="email" placeholder="Email" required autocomplete="username" style="box-sizing:border-box;width:100%;padding:12px;margin:8px 0;background:#0d1914;color:white;border:1px solid #496454;border-radius:9px">
+      <input id="authPassword" type="password" placeholder="Password (minimal 6 karakter)" required minlength="6" autocomplete="current-password" style="box-sizing:border-box;width:100%;padding:12px;margin:8px 0;background:#0d1914;color:white;border:1px solid #496454;border-radius:9px">
+      <input id="authMode" type="hidden" value="login">
+      <button id="authSubmit" type="submit" style="width:100%;padding:12px;margin-top:10px;background:#a9d8b5;color:#102017;border:0;border-radius:9px;font-weight:700;cursor:pointer">Masuk</button>
+      <button id="authCancel" type="button" style="width:100%;padding:10px;margin-top:8px;background:transparent;color:#c5e4cd;border:0;cursor:pointer">Batal, kembali sebagai pengunjung</button>
+      <p id="authMessage" style="color:#ffd18a;min-height:20px;overflow-wrap:anywhere"></p>
+    </form>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><div><div class="eyebrow">WBA DATABASE</div><h2 id="modalTitle">Tambah data</h2></div><button class="close-btn" id="closeModal">×</button></div><div id="modalBody"></div></div>
+  </div>
+  <div class="toast" id="toast"></div>
+  <div class="notification-pop" id="notificationPop"><b>Notifikasi sistem</b><p id="notificationText">Database lokal siap digunakan.</p></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js?v=cloud3"></script>
+</body>
+</html>
